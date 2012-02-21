@@ -76,6 +76,9 @@ function makeHttpRequest(url, postData, cookie) {
 	var path = parts['path']
 	var getParams = parts['query'] ? '?' + parts['query'] : ''
 	
+	if (!port)
+		port = useHttps ? 443 : 80
+	
 	var template = postData ? postTemplate : getTemplate
 	var request = ''
 
