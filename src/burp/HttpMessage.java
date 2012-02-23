@@ -177,6 +177,31 @@ public class HttpMessage {
     public String getBody() throws UnsupportedEncodingException {
         return new String(isolateBody(rawMessage), "UTF-8");
     }
+    
+    /**
+     * Set the body of the message, which is everything after the headers and whitespace separator.
+     * Any Content-Length header (if present) is automatically updated.
+     */
+    public void setBody(String body) throws Exception {
+        
+        String[] headers = burp.getHeaders(rawMessage);
+        StringBuilder message = new StringBuilder();
+        for (String header : headers) {
+            
+            //auto update content length
+            if (header.startsWith("Content-Length:"))
+                header = "Content-Length: " + body.getBytes("UTF-8").length;
+            
+            message.append(header);
+            message.append("\r\n");
+        }
+        
+        message.append("\r\n");
+        message.append(body);
+        
+        setMessage(message.toString());
+        
+    }
 
     /**
      * Get the the entire message as a String
