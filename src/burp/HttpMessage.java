@@ -239,7 +239,7 @@ public class HttpMessage {
     /**
      * Get HTTP parameters
      * 
-     * @see @see <a href="http://portswigger.net/burp/extender/burp/IBurpExtenderCallbacks.html#getParameters(byte[])">IBurpExtenderCallbacks</a>
+     * @see <a href="http://portswigger.net/burp/extender/burp/IBurpExtenderCallbacks.html#getParameters(byte[])">IBurpExtenderCallbacks</a>
      */
     public String[][] getParameters() throws Exception {
         return burp.getParameters(rawMessage);
