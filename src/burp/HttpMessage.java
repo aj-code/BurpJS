@@ -228,6 +228,40 @@ public class HttpMessage {
     }
     
     /**
+     * Get the status code of an HTTP response
+     * @return HTTP status code (ie 200, 302, etc) as in integer
+     * @throws Exception 
+     */
+    public int getStatusCode() throws Exception {
+        
+        if (isRequest)
+            throw new RuntimeException("Cannot get status code on HTTP request");
+        
+        String statusLine = burp.getHeaders(rawMessage)[0];
+        return Integer.parseInt(statusLine.split(" ")[1]);
+        
+    }
+    
+    
+    /**
+     * Set the status code of an HTTP response
+     * @param statusCode The status code you want to set.
+     * @throws Exception 
+     */
+    public void setStatusCode(int statusCode) throws Exception {
+        
+        if (isRequest)
+            throw new RuntimeException("Cannot set status code on HTTP request");
+        
+        String oldStatusCode = String.valueOf(getStatusCode());
+        
+        String[] headers = burp.getHeaders(rawMessage);
+        headers[0] = headers[0].replaceFirst(oldStatusCode, String.valueOf(statusCode));
+        
+        setHeaders(headers);
+    }
+    
+    /**
      * Set the entire message content. Headers and all.
      * @param message String representation of the entire message content.
      * @throws UnsupportedEncodingException 
