@@ -22,6 +22,7 @@ var burpInterface
 var getTemplate =
 "GET <%%relative_url%%> HTTP/1.1\r\n\
 Host: <%%host%%>\r\n\
+<%%extraHeaders%%>\
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.19) Gecko/20110420 Firefox/3.5.19)\r\n\
 <%%cookie%%>\r\n\r\n"
 
@@ -29,6 +30,7 @@ var postTemplate =
 "POST <%%relative_url%%> HTTP/1.1\r\n\
 Host: <%%host%%>\r\nUser-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.19) Gecko/20110420 Firefox/3.5.19\r\n\
 <%%cookie%%>\r\n\
+<%%extraHeaders%%>\
 Content-Type: application/x-www-form-urlencoded\r\n\
 Content-Length: <%%content_length%%>\r\n\
 \r\n\
@@ -67,7 +69,7 @@ function alert(message) {
 }
 
 
-function makeHttpRequest(url, postData, cookie) {
+function makeHttpRequest(url, postData, cookie, extraHeaders) {
 	
 	var parts = parseUri(url)
 	var useHttps = parts['protocol'].toLowerCase() == 'https://'
@@ -75,6 +77,7 @@ function makeHttpRequest(url, postData, cookie) {
 	var port = parts['port']
 	var path = parts['path']
 	var getParams = parts['query'] ? '?' + parts['query'] : ''
+	var extraHeaders = extraHeaders ? extraHeaders : ''
 	
 	if (!port)
 		port = useHttps ? 443 : 80
@@ -84,6 +87,7 @@ function makeHttpRequest(url, postData, cookie) {
 
 	request = template.replace('<%%relative_url%%>', path + getParams)
 	request = request.replace('<%%host%%>', host)
+	request = request.replace('<%%extraHeaders%%>', extraHeaders+'\r\n')
 
 	if (postData) {
 		request = request.replace('<%%content_length%%>', postData.length)
