@@ -151,6 +151,20 @@ function buildCookieString(cookies) {
 }
 
 
+//Base64 encode a byte array (this is an array of numbers from -127 to 127 representing a byte).
+function base64ArrayEncode(byteArray) {
+	if (!byteArray instanceof Array)
+		throw new org.mozilla.javascript.JavaScriptException("Error: Cannot Base64 encode an object that is not a java-ish byte array.")
+		
+	return Packages.burp.Base64.encodeBytes(byteArray)
+}
+
+//Decode a Base64 string into a Java byte array.
+function base64ArrayDecode(str) {
+	return Packages.burp.Base64.decode(str)
+}
+
+
 //----------------------------------------------
 //patch in some methods
 //----------------------------------------------
@@ -164,5 +178,6 @@ String.prototype.startsWith = function(str) {
 
 String.prototype.endsWith = function(str) {
 	return new java.lang.String(this).endsWith(str)
-} 
+}
+
 
