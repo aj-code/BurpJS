@@ -1,3 +1,7 @@
+
+###Now horribly outdated! This may still work, but your mileage will vary a lot.###
+
+
 BurpJS
 =============
 
